@@ -54,16 +54,6 @@ public class FindPackages extends ScanningRecipe<FindPackages.Accumulator> {
         return emptyList();
     }
     
-    @Override
-    public TreeVisitor<?, ExecutionContext> getVisitor(Accumulator acc) {
-        return new JavaIsoVisitor<ExecutionContext>() {
-            @Override
-            public J.CompilationUnit visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
-                return cu;
-            }
-        };
-    }
-      
     @Value
     public static class Accumulator {
         Set<String> packageNames = new LinkedHashSet<>();

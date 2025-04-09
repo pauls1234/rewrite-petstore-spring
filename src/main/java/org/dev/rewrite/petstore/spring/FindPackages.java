@@ -2,20 +2,19 @@ package org.dev.rewrite.petstore.spring;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.ScanningRecipe;
 import org.openrewrite.SourceFile;
-import org.openrewrite.Tree;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.tree.J;
+
+import org.dev.rewrite.petstore.spring.table.PackageName;
 
 import static java.util.Collections.emptyList;
 
@@ -23,6 +22,8 @@ import static java.util.Collections.emptyList;
 @EqualsAndHashCode(callSuper = false)
 public class FindPackages extends ScanningRecipe<FindPackages.Accumulator> {
 
+    transient PackageName packageName = new PackageName(this);
+    
     @Override
     public String getDisplayName() {
         return "Find packages";
@@ -43,7 +44,12 @@ public class FindPackages extends ScanningRecipe<FindPackages.Accumulator> {
         return new JavaIsoVisitor<ExecutionContext>() {
             @Override
             public J.CompilationUnit visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
-                acc.getPackageNames().add(cu.getPackageDeclaration().getPackageName());
+                String declarationPackageName = cu.getPackageDeclaration().getPackageName();
+                if (acc.getPackageNames().add(declarationPackageName)) {
+                    System.out.println("adding package " + declarationPackageName + " to table");
+                    packageName.insertRow(ctx, new PackageName.Row(
+                            cu.getPackageDeclaration().getPackageName()));
+                }
                 return cu;
             }
         };

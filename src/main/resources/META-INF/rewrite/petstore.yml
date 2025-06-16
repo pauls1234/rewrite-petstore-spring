@@ -1,0 +1,5 @@
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.dev.rewrite.petstore.spring.CreateAppLoggerClass
+recipeList:
+  - org.dev.rewrite.petstore.spring.CreateAppLoggerClass

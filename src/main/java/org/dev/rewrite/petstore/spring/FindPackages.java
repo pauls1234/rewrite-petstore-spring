@@ -44,12 +44,7 @@ public class FindPackages extends ScanningRecipe<FindPackages.Accumulator> {
         return new JavaIsoVisitor<ExecutionContext>() {
             @Override
             public J.CompilationUnit visitCompilationUnit(J.CompilationUnit cu, ExecutionContext ctx) {
-                String declarationPackageName = cu.getPackageDeclaration().getPackageName();
-                if (acc.getPackageNames().add(declarationPackageName)) {
-                    System.out.println("adding package " + declarationPackageName + " to table");
-                    packageName.insertRow(ctx, new PackageName.Row(
-                            cu.getPackageDeclaration().getPackageName()));
-                }
+                acc.getPackageNames().add(cu.getPackageDeclaration().getPackageName());
                 return cu;
             }
         };
@@ -57,6 +52,8 @@ public class FindPackages extends ScanningRecipe<FindPackages.Accumulator> {
     
     @Override
     public Collection<SourceFile> generate(Accumulator acc, ExecutionContext ctx) {
+        acc.packageNames.stream().forEach(
+                x -> packageName.insertRow(ctx, new PackageName.Row(x)));
         return emptyList();
     }
     

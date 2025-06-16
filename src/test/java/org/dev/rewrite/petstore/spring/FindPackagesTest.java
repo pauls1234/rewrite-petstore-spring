@@ -9,7 +9,7 @@ import static org.openrewrite.java.Assertions.java;
 
 import org.dev.rewrite.petstore.spring.table.PackageName;
 
-public class FindPackagesTest implements RewriteTest {
+class FindPackagesTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
@@ -38,7 +38,7 @@ public class FindPackagesTest implements RewriteTest {
                     int a;
                 }
                 """
-          ),
+            ),
             java(
               """
                 package org.openrewrite.test.two;
@@ -46,7 +46,7 @@ public class FindPackagesTest implements RewriteTest {
                     int a;
                 }
                 """
-          )
+            )
         );
     }
 }

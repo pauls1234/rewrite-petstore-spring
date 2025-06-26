@@ -29,6 +29,13 @@ class AddTryBlockToMethodTest implements RewriteTest {
                 public class TestService {
                     public void processData() {
                         System.out.println("Processing data");
+                        int i = 0;
+                        while (i < 2) {
+                            if (i == 0) {
+                                System.out.println("Processing...");
+                            }
+                            i++;
+                        }
                         doSomeWork();
                     }
                     
@@ -44,6 +51,13 @@ class AddTryBlockToMethodTest implements RewriteTest {
                     public void processData() {
                         try {
                             System.out.println("Processing data");
+                            int i = 0;
+                            while (i < 2) {
+                                if (i == 0) {
+                                    System.out.println("Processing...");
+                                }
+                                i++;
+                            }
                             doSomeWork();
                         } catch (Exception e) {
                             e.printStackTrace();

@@ -48,7 +48,11 @@ public class AddTryBlockToMethod extends Recipe {
                     // Build the statements string manually
                     StringBuilder stmtBuilder = new StringBuilder();
                     for (Statement stmt : existingStatements) {
-                        stmtBuilder.append("    ").append(stmt.printTrimmed(getCursor())).append(";\n");
+                        stmtBuilder.append("    ").append(stmt.printTrimmed(getCursor()));
+                        if (needsSemicolon(stmt)) {
+                            stmtBuilder.append(";");
+                        }
+                        stmtBuilder.append("\n");
                     }
                     
                     // Create template without parameters
@@ -69,6 +73,15 @@ public class AddTryBlockToMethod extends Recipe {
                 return m;
             }
         };
+    }
+    
+    private boolean needsSemicolon(Statement stmt) {
+        // Most statements need semicolons except blocks, if/for/while without braces, etc.
+        return !(stmt instanceof J.Block || 
+                 stmt instanceof J.If || 
+                 stmt instanceof J.ForLoop || 
+                 stmt instanceof J.WhileLoop ||
+                 stmt instanceof J.Try);
     }
     
     private static class TryFinder extends JavaIsoVisitor<ExecutionContext> {
